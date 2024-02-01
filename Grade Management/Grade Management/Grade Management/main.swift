@@ -8,23 +8,41 @@
 import Foundation
 import CSV
 
-do
+var studentName: String = ""
+var grade: [Int] = []
+
+func startScreen()
 {
-    let stream = InputStream(fileAtPath: "/Users/studentam/desktop/Grades.csv")
-    let csv = try CSVReader(stream: stream!)
-    while let row = csv.next()
-    {
-        print(row)
+    do {
+        let stream = InputStream(fileAtPath: "/Users/studentam/desktop/Grades.csv")
+        
+        guard let csvStream = stream else {
+            print("Failed to open CSV file.")
+            return
+        }
+        
+        let csv = try CSVReader(stream: csvStream)
+        
+        while let row = csv.next() {
+            // Assuming each row represents data with multiple columns (grades)
+            let studentName = row[0]
+            
+            // Accessing grades starting from the second column (index 1)
+            for i in 1..<row.count {
+                if let grade = Int(row[i]) {
+                    print("Student: \(studentName), Grade \(i): \(grade)")
+                    
+                    // You can perform further processing or store the data as needed
+                } else {
+                    print("Error converting grade to integer for \(studentName), Grade \(i)")
+                }
+            }
+        }
+    } catch {
+        print("Error reading CSV file: \(error)")
     }
 }
-catch
-{
-    print("There was an error!")
-}
 
-
-func startScreen ()
-{
     
     print ("Welcome, what would you like to do")
     print ("1. Display grade of a single student")
@@ -73,18 +91,30 @@ func startScreen ()
         }
         if input1 == "9"
         {
-            return
         }else
         {
             print("Error")
             startScreen()
         }
     }
-}
 
 func singleStudentsGrade()
 {
-    
+    print("what students grade do you want to see?")
+    if var input2 = readLine()
+    {
+        for i in studentName.indices
+        {
+//            if input2 == studentName[i]
+//            {
+//                
+//            }
+            if input2 != studentName
+            {
+                
+            }
+        }
+    }
 }
 
 func singleStudentsGrades()
