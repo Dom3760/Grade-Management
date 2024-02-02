@@ -8,8 +8,8 @@
 import Foundation
 import CSV
 
-var studentName: String = ""
-var grade: [Int] = []
+var studentName: [String] = []
+var grade: [[Int]] = []
 
 func startScreen()
 {
@@ -24,19 +24,17 @@ func startScreen()
         let csv = try CSVReader(stream: csvStream)
         
         while let row = csv.next() {
-            // Assuming each row represents data with multiple columns (grades)
-            let studentName = row[0]
-            
-            // Accessing grades starting from the second column (index 1)
+            studentName.append(row[0])
+            var studentGrades: [Int] = []
             for i in 1..<row.count {
-                if let grade = Int(row[i]) {
-                    print("Student: \(studentName), Grade \(i): \(grade)")
-                    
-                    // You can perform further processing or store the data as needed
+                if let grade1 = Int(row[i]) {
+                    studentGrades.append(grade1)
+                    print("Student: \(studentName), Grade \(i): \(grade1)")
                 } else {
                     print("Error converting grade to integer for \(studentName), Grade \(i)")
                 }
             }
+            grade.append(studentGrades)
         }
     } catch {
         print("Error reading CSV file: \(error)")
@@ -103,17 +101,7 @@ func singleStudentsGrade()
     print("what students grade do you want to see?")
     if var input2 = readLine()
     {
-        for i in studentName.indices
-        {
-//            if input2 == studentName[i]
-//            {
-//                
-//            }
-            if input2 != studentName
-            {
-                
-            }
-        }
+        
     }
 }
 
