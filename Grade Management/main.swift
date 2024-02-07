@@ -34,6 +34,8 @@ func startScreen()
 //                    print("Error converting grade to integer for \(studentNames), Grade \(i)")
                 }
             }
+            //call the function to calculate the final grade, pass studentGrades as paramater
+
             grade.append(studentGrades)
         }
     } catch {
@@ -88,13 +90,31 @@ func startScreen()
         if input1 == "9"
         {
             print("have a good day!")
-            return()
-        }else
+            exit(0)
+        }
+        else
         {
             print("Error")
             startScreen()
         }
     }
+}
+
+func calcGrade() ->[Int]{
+    var grades2: [Int] = []
+    var current2 = 0
+    
+    for i in grade.indices
+    {
+        for j in grade[i].indices
+        {
+            current2 += grade[i][j]
+        }
+        current2 /= grade[i].count
+        grades2.append(current2)
+        current2 = 0
+    }
+    return (grades2)
 }
 
 func singleStudentsGrade() {
@@ -157,26 +177,16 @@ func allStudentsGrades()
 
 func averageOfClass()
 {
-    var average = 0
-    var currentNum = 0
+    var num = 0
     for i in grade.indices
     {
-        for j in grade.indices
-        {
-            currentNum += grade[i][j]
-        }
-        currentNum = currentNum / grade[i].count
-        average += currentNum
-        currentNum = 0
-        if i == grade.count
-        {
-            average /= grade.count
-            print ("the average is:\(average)")
-            average = 0
-            sleep(1)
-            startScreen()
-        }
+        num += calcGrade()[i]
     }
+    num /= grade.count
+    print("The average of the class is \(num)")
+    sleep(1)
+    num = 0
+    startScreen()
 }
 
 func averageOnAssignment()
@@ -187,7 +197,7 @@ func averageOnAssignment()
     {
         for i in grade.indices
         {
-            current2 += grade[i][input1]
+            current2 += grade[i][input1-1]
         }
         current2 /= studentNames.count
         print("the average of that assignement is: \(current2)")
@@ -199,57 +209,90 @@ func averageOnAssignment()
 
 func lowestGrade()
 {
-    var grades2: [Int] = []
-    var current2 = 0
-    for i in studentNames.indices
-    {
-        for j in studentNames.indices
-        {
-            current2 += grade[i][j]
-        }
-        current2 /= studentNames.count
-        grades2.append(current2)
-        current2 = 0
-    }
-    if let lowest = grades2.min(), let index = grades2.firstIndex(of: lowest)
+    if let lowest = calcGrade().min(), let index = calcGrade().firstIndex(of: lowest)
     {
         print ("the lowest grade is by: \(studentNames[index]) with a grade of: \(lowest)")
     }
-//    if let minNumber = numbers.min(), let index = numbers.firstIndex(of: minNumber) {
+    sleep(1)
+    startScreen()
+    //    if let minNumber = numbers.min(), let index = numbers.firstIndex(of: minNumber) {
 }
 
 func highestGrade()
 {
-    var grades2: [Int] = []
-    var current2 = 0
-    for i in studentNames.indices
+    if let highest = calcGrade().max(), let index = calcGrade().firstIndex(of: highest)
     {
-        for j in studentNames.indices
-        {
-            current2 += grade[i][j]
-        }
-        current2 /= studentNames.count
-        grades2.append(current2)
-        current2 = 0
+        print ("the lowest grade is by: \(studentNames[index]) with a grade of: \(highest)")
     }
-    if let highest = grades2.max(), let index = grades2.firstIndex(of: highest)
-    {
-        print ("the highest grade is by: \(studentNames[index]) with a grade of: \(highest)")
-    }
+    sleep(1)
+    startScreen()
 }
 
-func filter()
-{
+func filter() {
     print("Enter the low range you would like to use?")
-    if let lowRange = readLine()
+    var lowRange = 0
+    while true 
     {
-        
+        if let input = readLine(), let range = Int(input)
+        {
+            if range >= 0
+            {
+                lowRange = range
+                break
+            } else 
+            {
+                print("That is not a valid number.")
+                sleep(1)
+            }
+        } else 
+        {
+            print("Invalid input.")
+            sleep(1)
+        }
     }
+    
     print("Enter the high range you would like to use?")
-    if let highRange = readLine()
+    var highRange = 0
+    while true 
     {
-        
+        if let input = readLine(), let range = Int(input) 
+        {
+            if range >= 0
+            {
+                highRange = range
+                break
+            } 
+            else
+            {
+                print("That is not a valid number.")
+                sleep(1)
+            }
+        } 
+        else
+        {
+            print("Invalid input.")
+            sleep(1)
+        }
     }
+
+    if lowRange >= highRange 
+    {
+        print("Low range cannot be greater than or equal to high range.")
+        sleep(1)
+        filter()
+    }
+
+    for i in studentNames.indices 
+    {
+        let averageGrade = calcGrade()[i]
+        if averageGrade > lowRange && averageGrade < highRange 
+        {
+            print("\(studentNames[i]): \(averageGrade)")
+        }
+    }
+    sleep(2)
+    startScreen()
 }
+
 
 startScreen()
