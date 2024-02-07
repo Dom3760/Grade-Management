@@ -14,7 +14,7 @@ var grade: [[Int]] = []
 func startScreen()
 {
     do {
-        let stream = InputStream(fileAtPath: "/Users/studentam/desktop/Grades.csv")
+        let stream = InputStream(fileAtPath: "/Users/studentam/desktop/Grade-Management/Grades.csv")
         
         guard let csvStream = stream else {
             print("Failed to open CSV file.")
@@ -118,25 +118,17 @@ func calcGrade() ->[Int]{
 }
 
 func singleStudentsGrade() {
-    print (studentNames)
-    print (grade)
     print("Enter the name of the student:")
     if let inputName = readLine() {
         for i in studentNames.indices
         {
-            if inputName == studentNames[i]
+            if inputName.lowercased() == studentNames[i].lowercased()
             {
                 print("\(inputName) found")
-                print("what grade would you like to see (1-10)?")
-                if let input2 = Int(readLine()!)
-                {
-                    print (grade[i][input2 - 1])
-                    sleep(3)
-                    startScreen()
-                }
+                print("\(inputName)'s grade is: \(calcGrade()[i])")
             }
         }
-        print("that name is not available or does not exist.")
+        sleep(2)
         startScreen()
     }
 }
